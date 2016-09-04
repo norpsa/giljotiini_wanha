@@ -1,7 +1,10 @@
+"use strict";
+
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var router = express.Router();
+var bodyParser = require('body-parser');
 
 var games = [];
 
@@ -10,15 +13,21 @@ app.get('/', function(req, res){
 });
 
 app.use('/api/v1', router);
+router.use(bodyParser.json());
 
 // CREATE GAME
-router.post('/game/:name', function(req, res){
-	var name = req.params['name'];
-	var id = new Date().valueOf();
-	var newGame = {name : name,
-					id 	: id};
-	games.push(newGame);
-	res.sendStatus(200);
+router.post('/game', function(req, res){
+  let name = req.body['name'];
+  if(name){
+    //TODO: use GUID
+    let id = new Date().valueOf();
+    let newGame = {name : name,
+		                id 	: id};
+     games.push(newGame);
+     res.sendStatus(200);
+  }else{
+    res.status(400).send("Kirjota nimi, bitte");
+  }
 });
 
 // GET LIST OF GAMES
@@ -28,11 +37,11 @@ router.get('/game', function(req, res){
 
 // GET GAME BY ID
 router.get('/game/:id', function(req, res){
-	var id = req.params['id'];
+	let id = req.params['id'];
 
-	var game;
+	let game;
 
-	for(var i = 0; i < games.length; i++){
+	for(let i = 0; i < games.length; i++){
 		if(games[i]['id'] == id){
 			game = games[i];
 			break;
@@ -44,29 +53,29 @@ router.get('/game/:id', function(req, res){
 	} else {
 		res.json(game);
 	}
-	
+
 });
 
 // DELETE GAME BY ID
 router.delete('/game/:id', function(req, res){
-	var id = req.params['id'];
+	let id = req.params['id'];
 
-	var game;
+	let game;
 
-	for(var i = 0; i < games.length; i++){
+	for(let i = 0; i < games.length; i++){
 		if(games[i]['id'] == id){
 			game = games[i];
-			games.splice(games.indexOf(game), 1);
-			break;
+      games.splice(games.indexOf(game), 1);
+      break;
 		}
 	}
 
-	if(typeof game === 'undefined'){
-		res.status(404).send('Ei oo');
+	if(game){
+    res.sendStatus(200);
 	} else {
-		res.sendStatus(200);
+		res.status(404).send('Ei oo');
 	}
-	
+
 });
 
 http.listen(3000, function(){
