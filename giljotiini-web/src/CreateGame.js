@@ -5,10 +5,23 @@ import React, { Component } from 'react';
 export default class CreateGame extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      games : [],
+      name : "peli"
+    }
   }
 
   componentDidMount() {
-    
+    axios.get(this.props.url + '/game')
+    .then((res) => {
+      this.setState( {
+        games : res.data
+      });
+      console.log(this.state.games);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   componentWillUnmount() {
@@ -19,7 +32,7 @@ export default class CreateGame extends Component {
     console.log("createGame");
     axios.post(this.props.url + '/game',
     {
-      name: 'kissa'
+      name: this.state.name
     })
     .then((res) => {
       console.log(res);
@@ -29,10 +42,20 @@ export default class CreateGame extends Component {
     });
   }
 
+  updateName = (event) => {
+    this.setState({name: event.target.value});
+  }
+
   render() {
     return (
       <div>
-        <button onClick={this.createGame}>Luo peli</button>
+        <ul>
+          {this.state.games.map(function(game) {
+            return <li key={game.id}>{game.name}</li>;
+          })}
+        </ul>
+          <input value={this.state.name} type="text" onChange={this.updateName}/>
+          <button onClick={this.createGame}>Luo peli</button>
       </div>
     );
   }
