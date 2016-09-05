@@ -8,7 +8,7 @@ export default class CreateGame extends Component {
   }
 
   componentDidMount() {
-    console.log("didmoutn");
+    
   }
 
   componentWillUnmount() {
@@ -17,7 +17,8 @@ export default class CreateGame extends Component {
 
   createGame = () => {
     console.log("createGame");
-    axios.post(this.props.url + '/game', {
+    axios.post(this.props.url + '/game',
+    {
       name: 'kissa'
     })
     .then((res) => {
