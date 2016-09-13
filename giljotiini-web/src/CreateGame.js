@@ -36,7 +36,12 @@ export default class CreateGame extends Component {
     })
     .then((res) => {
       console.log(res);
-      //TODO: add game to state
+      let newGames = this.state.games;
+      newGames.push(res.data);
+      this.setState({
+        games : newGames,
+        name : ""
+      })
     })
     .catch((error) => {
       console.log(error);

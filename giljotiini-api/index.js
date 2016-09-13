@@ -40,7 +40,7 @@ router.post('/game', function(req, res){
     let newGame = {name : name,
 		                id 	: id};
      games.push(newGame);
-     res.sendStatus(200);
+     res.status(200).json(newGame);
   }else{
     res.status(400).send("Kirjota nimi, bitte");
   }
