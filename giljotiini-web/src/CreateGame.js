@@ -7,7 +7,7 @@ export default class CreateGame extends Component {
     super(props);
     this.state = {
       games : [],
-      name : "peli"
+      name : ""
     }
   }
 
@@ -36,6 +36,7 @@ export default class CreateGame extends Component {
     })
     .then((res) => {
       console.log(res);
+      //TODO: add game to state
     })
     .catch((error) => {
       console.log(error);
