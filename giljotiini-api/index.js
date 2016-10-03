@@ -5,6 +5,8 @@ var app = express();
 var http = require('http').Server(app);
 var router = express.Router();
 var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var io = require('socket.io')(http);
 
 // Allow cross domain requests
 var allowCrossDomain = function(req, res, next) {
@@ -22,6 +24,8 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 var games = [];
+
+app.use(morgan('dev'));
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -96,4 +100,8 @@ router.delete('/game/:id', function(req, res){
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
+});
+
+io.on('connection', function(socket){
+  console.log('a user connected');
 });
